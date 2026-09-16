@@ -1,6 +1,7 @@
 package jm.task.core.jdbc.dao;
 
 import jm.task.core.jdbc.model.User;
+import jm.task.core.jdbc.util.Util;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void createUsersTable() {
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/mydb","root","password");
+        try (Connection connection = Util.Connection();
              PreparedStatement statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS USERS (" +
                      "ID BIGINT PRIMARY KEY AUTO_INCREMENT ," +
                      "NAME VARCHAR(50) NOT NULL," +
@@ -28,7 +29,7 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void dropUsersTable() {
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/mydb","root","password");
+        try (Connection connection = Util.Connection();
         PreparedStatement statement = connection.prepareStatement("DROP TABLE if exists USERS")){
             statement.executeUpdate();
 
@@ -39,7 +40,7 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void saveUser(String name, String lastName, byte age) {
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/mydb","root","password");
+        try (Connection connection = Util.Connection();
         PreparedStatement statement = connection.prepareStatement("INSERT INTO  USERS (NAME,LASTNAME,AGE)  values (?,?,?)")){
             statement.setString(1,name);
             statement.setString(2,lastName);
@@ -56,7 +57,7 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void removeUserById(long id) {
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/mydb","root","password");
+        try (Connection connection = Util.Connection();
         PreparedStatement statement = connection.prepareStatement("DELETE  FROM USERS where id = ?")){
             statement.setLong(1,id);
             statement.executeUpdate();
@@ -69,7 +70,7 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public List<User> getAllUsers() {
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/mydb","root","password");
+        try (Connection connection = Util.Connection();
         PreparedStatement statement = connection.prepareStatement("SELECT * FROM USERS") ;
              ResultSet resultSet = statement.executeQuery()){
             List<User> list = new ArrayList<>();
@@ -89,7 +90,7 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void cleanUsersTable() {
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/mydb","root","password");
+        try (Connection connection = Util.Connection();
         PreparedStatement statement = connection.prepareStatement("TRUNCATE TABLE USERS")){
             statement.executeUpdate();
 
